@@ -1,31 +1,43 @@
 let total = 0;
+let carrito = [];
 
 const menu = document.getElementById("menu");
-const totalTexto = document.getElementById("total");
+const totalElemento = document.getElementById("total");
+const carritoCantidad = document.getElementById("cart-count");
 
-bebidas.forEach((bebida)=>{
+function actualizarTotal() {
+  totalElemento.textContent = "$" + total.toFixed(2);
+  carritoCantidad.textContent = carrito.length;
+}
 
-const tarjeta = document.createElement("div");
-tarjeta.className="drink-card";
+bebidas.forEach((bebida) => {
 
-tarjeta.innerHTML=`
-<img src="${bebida.imagen}">
-<h2>${bebida.nombre}</h2>
-<p>$${bebida.precio.toFixed(2)}</p>
+  const tarjeta = document.createElement("div");
+  tarjeta.className = "drink-card";
 
-<button>➕ Agregar</button>
-`;
+  tarjeta.innerHTML = `
+    <img src="${bebida.imagen}" alt="${bebida.nombre}">
 
-const boton=tarjeta.querySelector("button");
+    <div class="drink-info">
+      <h2>${bebida.nombre}</h2>
+      <p>${bebida.descripcion}</p>
 
-boton.onclick=()=>{
+      <p class="price">$${bebida.precio.toFixed(2)}</p>
 
-total+=bebida.precio;
+      <button class="add-btn">➕ Agregar</button>
+    </div>
+  `;
 
-totalTexto.textContent="$"+total.toFixed(2);
+  tarjeta.querySelector(".add-btn").onclick = () => {
+    carrito.push(bebida);
+    total += bebida.precio;
+    actualizarTotal();
 
-};
+    alert(`${bebida.nombre} agregado al pedido.`);
+  };
 
-menu.appendChild(tarjeta);
+  menu.appendChild(tarjeta);
 
 });
+
+actualizarTotal();
