@@ -2,9 +2,10 @@ let carrito = [];
 let total = 0;
 
 const menu = document.getElementById("menu");
+const buscar = document.getElementById("buscar");
 const totalElemento = document.getElementById("total");
 const carritoCantidad = document.getElementById("cart-count");
-const buscar = document.getElementById("buscar");
+const botonCarrito = document.getElementById("cartButton");
 
 function actualizarResumen() {
   totalElemento.textContent = "$" + total.toFixed(2);
@@ -28,17 +29,19 @@ function mostrarBebidas(lista) {
       </div>
     `;
 
-    tarjeta.querySelector(".add-btn").addEventListener("click", () => {
+    const botonAgregar = tarjeta.querySelector(".add-btn");
+
+    botonAgregar.onclick = () => {
       carrito.push(bebida);
       total += bebida.precio;
       actualizarResumen();
-    });
+    };
 
     menu.appendChild(tarjeta);
   });
 }
 
-buscar.addEventListener("input", () => {
+buscar.oninput = () => {
   const texto = buscar.value.toLowerCase();
 
   const resultado = bebidas.filter((bebida) =>
@@ -46,24 +49,26 @@ buscar.addEventListener("input", () => {
   );
 
   mostrarBebidas(resultado);
-});
+};
 
-mostrarBebidas(bebidas);
-actualizarResumen();
+botonCarrito.onclick = () => {
 
-document.getElementById("cartButton").addEventListener("click", () => {
   if (carrito.length === 0) {
-    alert("Tu pedido está vacío.");
+    alert("🛒 Tu carrito está vacío.");
     return;
   }
 
-  let mensaje = "🛒 Tu pedido:\n\n";
+  let mensaje = "🛒 TU PEDIDO\n\n";
 
-  carrito.forEach((bebida) => {
-    mensaje += `• ${bebida.nombre} - $${bebida.precio.toFixed(2)}\n`;
+  carrito.forEach((bebida, i) => {
+    mensaje += `${i + 1}. ${bebida.nombre} - $${bebida.precio.toFixed(2)}\n`;
   });
 
-  mensaje += `\nTOTAL: $${total.toFixed(2)}`;
+  mensaje += "\n----------------------";
+  mensaje += "\nTOTAL: $" + total.toFixed(2);
 
   alert(mensaje);
-});
+};
+
+mostrarBebidas(bebidas);
+actualizarResumen();
